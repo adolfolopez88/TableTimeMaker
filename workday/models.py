@@ -1,4 +1,7 @@
+from __future__ import unicode_literals
+
 from django.db import models
+from clients.models import Client
 
 # Create your models here.
 class Workday(models.Model):
@@ -12,4 +15,16 @@ class Workday(models.Model):
 
 	#ayuda a los modelos
 	class Meta:
-		ordering = (id, )
+		ordering = ['id' ]
+
+class WorkdayClient(models.Model):
+	client = models.ForeignKey(Client)
+	workday = models.ForeignKey(Workday)
+	
+	#class Meta:
+	#	verbose_name = ''
+
+	def __str__(self):
+		return '%s %s' % (self.client.name,  self.workday.suburb)
+
+

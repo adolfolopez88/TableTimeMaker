@@ -1,20 +1,17 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-#from django.shortcuts import render
 
 from .models import Workday
-from .forms import WordayForm
-
-# Create your views here.
+from .forms import WorkdayForm
 
 def hello_world(request):
-	#return render(request, 'index.html')
 	work_day = Workday.objects.order_by('id')
 	template = loader.get_template('index.html')
 	context = { 
 		'work_day': work_day 
 	}
+	
 	return HttpResponse(template.render(context, request))
 
 def workday_detail(request, pk):
@@ -27,10 +24,20 @@ def workday_detail(request, pk):
 	return HttpResponse(template.render(context, request))
 
 def new_workday(request):
+	if request.method == 'POST':
+		form = WorkdayForm(request.POST, request.FILES)
+		if form.is_valid():
+			work_day = form.save(commit=False)
+			work_day.save()
+			return HttpResponseRedirect('/')
+	else:
+		form = WorkdayForm()
+
 	template = loader.get_template('new_worday.html')
-	form = WordayForm()
 	context = {
 		'form': form
 	}
-
+	
 	return HttpResponse(template.render(context, request))
+
+
