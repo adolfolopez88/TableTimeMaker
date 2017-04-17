@@ -7,12 +7,15 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
 </head>
 <body>
-	{% for day in work_day %}
-		<li>
-			<a href="{% url 'workday_detail' pk=day.pk %}">{{day.suburb}}</a>|
-			{{day.date_start}}|
-			<img src="{{day.image.url}}">
-		</li>
-	{% endfor %}
+	<ul>
+		{% for day in work_day %}
+			<li>
+				<a href="{% url 'workday_detail' pk=day.pk %}">{{day.suburb}}</a>|
+				{{day.date_start}}|
+				<img src="{{day.image.url}}">
+			</li>
+
+		{% endfor %}
+	</ul>	
 </body>
 </html>

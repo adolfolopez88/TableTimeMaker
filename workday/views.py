@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+
 from .models import Workday
 from .forms import WorkdayForm
 
@@ -40,4 +43,10 @@ def new_workday(request):
 	
 	return HttpResponse(template.render(context, request))
 
+
+class WorkdayList(ListView):
+	model = Workday
+
+class WorkdayDetail(DetailView):
+	model = Workday
 
