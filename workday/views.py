@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 
 from .models import Workday
 from .forms import WorkdayForm
+from .mixins import LoginRequiredMixin
 
 def hello_world(request):
 	work_day = Workday.objects.order_by('id')
@@ -26,6 +27,8 @@ def workday_detail(request, pk):
 
 	return HttpResponse(template.render(context, request))
 
+
+@login_required()
 def new_workday(request):
 	if request.method == 'POST':
 		form = WorkdayForm(request.POST, request.FILES)
@@ -43,10 +46,9 @@ def new_workday(request):
 	
 	return HttpResponse(template.render(context, request))
 
-
 class WorkdayList(ListView):
 	model = Workday
 
-class WorkdayDetail(DetailView):
+class WorkdayDetail(LoginRequiredMixin, DetailView):
 	model = Workday
 
